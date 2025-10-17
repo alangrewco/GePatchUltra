@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/bhavjotg/Documents/projects/native-vita/build/cmake_install.cmake",
+		"/Users/bhavjotg/Documents/projects/native-vita/build/host_mock/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

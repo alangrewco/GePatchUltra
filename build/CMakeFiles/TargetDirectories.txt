@@ -1,0 +1,6 @@
+/Users/bhavjotg/Documents/projects/native-vita/build/CMakeFiles/edit_cache.dir
+/Users/bhavjotg/Documents/projects/native-vita/build/CMakeFiles/rebuild_cache.dir
+/Users/bhavjotg/Documents/projects/native-vita/build/host_mock/CMakeFiles/ge_receiver.dir
+/Users/bhavjotg/Documents/projects/native-vita/build/host_mock/CMakeFiles/ge_sender.dir
+/Users/bhavjotg/Documents/projects/native-vita/build/host_mock/CMakeFiles/edit_cache.dir
+/Users/bhavjotg/Documents/projects/native-vita/build/host_mock/CMakeFiles/rebuild_cache.dir

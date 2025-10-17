@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.16)
+project(vita_renderer C)
+set(CMAKE_TOOLCHAIN_FILE $ENV{VITASDK}/share/vita.toolchain.cmake)
+set(VITA_APP_NAME vita_renderer)
+add_executable(${PROJECT_NAME} main.c)
+target_link_libraries(${PROJECT_NAME} SceLibKernel taihen_stub)
+vita_create_self(vita_renderer.suprx ${PROJECT_NAME} CONFIG export.yml UNSAFE)

@@ -1,0 +1,1 @@
+/usr/bin/cc  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/ge_receiver.dir/receiver_main.c.o CMakeFiles/ge_receiver.dir/mock_kermit.c.o CMakeFiles/ge_receiver.dir/__/common/framing.c.o -o ge_receiver

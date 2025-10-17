@@ -1,0 +1,10 @@
+PSP2:
+  Modules:
+    - libname: vita_renderer
+      nid: 0x100
+      libraries:
+        - name: vita_renderer
+          version: 1
+          nid: 0x200
+          functions: []
+          variables: []
