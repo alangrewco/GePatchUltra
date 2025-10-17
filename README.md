@@ -19,20 +19,20 @@
           ▼
   [Adrenaline PSP emu]
           │
-   ┌───────────────┐
-   │ PSP-side PRX  │  (kernel plugin)
-   │  • Hook GE list enqueue / stall / finish
-   │  • Resolve BASE/OFFSET and pack GE commands
-   │  • Stream resources (verts/indices/textures/CLUT)
-   └───────────────┘
+   ┌───────────────────────────────────────────────────┐
+   │ PSP-side PRX    (kernel plugin)                   │
+   │  • Hook GE list enqueue / stall / finish          │
+   │  • Resolve BASE/OFFSET and pack GE commands       │
+   │  • Stream resources (verts/indices/textures/CLUT) │
+   └───────────────────────────────────────────────────┘
           │  (Kermit transport)
           ▼
-   ┌───────────────┐
-   │ Vita renderer │  (userland app/plugin)
-   │  • Reconstruct GE state
-   │  • Replay draws via GXM/vitaGL at 960×544
-   │  • Present once per GE FINISH/vblank
-   └───────────────┘
+   ┌───────────────────────────────────────────────────┐
+   │ Vita renderer │  (userland app/plugin)            │
+   │  • Reconstruct GE state                           │
+   │  • Replay draws via GXM/vitaGL at 960×544         │
+   │  • Present once per GE FINISH/vblank              │
+   └───────────────────────────────────────────────────┘
           │
           ▼
       [Vita display]
@@ -40,14 +40,6 @@
 
 * **PSP side (PRX)**: walks GE lists (no destructive edits), packets up commands + resource refs, and streams them out.
 * **Vita side**: receives the stream, manages texture/RT caches, and renders using the Vita GPU.
-
-
-
-## Current status
-
-* **Milestone 0 – Boot proof (PSP side loads)** ✅
-  The PRX loads under Adrenaline and writes `ux0:/pspemu/ge_ack.txt` → `GePatch module_start OK`.
-
 
 
 ## Roadmap (milestones & checkboxes)
@@ -159,28 +151,6 @@ Run receiver in one terminal and sender in another to see framed packet exchange
 * **Games:** ensure `game.txt` enables the PRX. Launch Adrenaline → your games.
 * **PSP XMB (optional):** enable the PRX in `vsh.txt`.
 * **Until M3+** there’s no visible native rendering yet, Milestone 0/1 are “endpoints alive”. Visual native rendering begins when the Vita renderer starts drawing in M3+.
-
-
-
-## Troubleshooting
-
-**Finder doesn’t show the Vita drive (ux0:)**
-VitaShell → START → set USB device to `ux0:` → SELECT to mount. In Finder → Preferences → Sidebar → check “External disks.”
-
-**Docker can’t find PSP tools**
-Use this exact build command:
-
-```bash
-docker run --rm -it --platform linux/amd64 \
-  -v "$PWD":/work -w /work pspdev/pspdev:latest \
-  bash -lc 'export PSPDEV=/usr/local/pspdev; export PATH=$PSPDEV/bin:$PATH; make -j$(nproc)'
-```
-
-**Build errors about `sceGuStart`**
-Your `gu.c` must declare `int sceGuStart(int, void*)` and return `0` to match the SDK.
-
-**`systemctrl.h` missing**
-You don’t need it for M0/M1. Keep the current M0 body (write the ACK, no hooks). We’ll add syscall patches later.
 
 
 
