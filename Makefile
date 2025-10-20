@@ -12,7 +12,7 @@ ROOT := $(CURDIR)
 JOBS ?= $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
 
 .PHONY: help all vita psp clean clean-all clean-vita clean-psp docker-pull \
-        vita-rebuild psp-rebuild
+        vita-rebuild psp-rebuild deploy-psp enable-vsh disable-vsh vsh-status
 
 # ---- Help ----
 help:
@@ -36,6 +36,20 @@ docker-pull:
 	@docker pull $(VITASDK_IMAGE)
 	@docker pull $(PSPDEV_IMAGE)
 
+# Copy ge_patch.prx to ux0:pspemu/seplugins (mount ux0 in VitaShell first).
+deploy-psp:
+	@bash scripts/deploy_ge_patch.sh $(if $(VITA_VOL),--volume $(VITA_VOL),)
+
+# Same as above + ensure vsh.txt has the plugin enabled.
+enable-vsh:
+	@bash scripts/vsh_plugin.sh enable $(if $(VITA_VOL),--volume $(VITA_VOL),)
+
+disable-vsh:
+	@bash scripts/vsh_plugin.sh disable $(if $(VITA_VOL),--volume $(VITA_VOL),)
+
+vsh-status:
+	@bash scripts/vsh_plugin.sh status $(if $(VITA_VOL),--volume $(VITA_VOL),)
+
 # ---- Vita: build & clean ----
 # Mirrors your command, but runnable from repo root.
 vita:
@@ -55,6 +69,11 @@ clean-vita:
 	@rm -f  "$(ROOT)/vita_bridge"/*.self "$(ROOT)/vita_bridge"/*.vpk
 
 # ---- PSP: build & clean ----
+psp: psp-deps  ## build pspemu_plugin (ensures stubs exist first)
+
+psp-deps:
+	@bash scripts/fetch_psp_systemctrl.sh
+
 # Wraps the pspsdk Makefile from the root, no cd needed.
 psp:
 	@echo "==> Building pspemu_plugin (PRX) in Docker..."
